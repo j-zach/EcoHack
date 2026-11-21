@@ -124,11 +124,17 @@ Soil fungal diversity at 66 restored and ancient woodlands [8], TESSERA embeddin
 
 ## Who pays
 
-1. **Pharma and biotech:** a collection shortlist with location, habitat, consent and permit. Rare and unnamed taxa are the least-screened chemistry.
-2. **Governments:** national fungal monitoring for Kunming-Montreal reporting.
-3. **Farm biologicals:** matching microbial products to soils.
-4. **eDNA and Earth-observation firms:** partners and data buyers.
-5. **Insurance and lending:** later, once the map is proven.
+**Mission: ecosystem sustainability. Revenue: pharma keeps it running.**
+
+*For the mission*
+1. **Governments and environment agencies:** national fungal monitoring for Kunming-Montreal reporting.
+2. **Restoration and conservation programmes:** proof that soil life is recovering, measured rather than assumed.
+3. **eDNA and Earth-observation firms:** partners and data buyers.
+
+*To sustain the company*
+
+4. **Pharma and biotech:** a collection shortlist with location, habitat, consent and permit. Rare and unnamed taxa are the least-screened chemistry. Part of this revenue returns to source countries and communities through benefit-sharing, and funds more monitoring sites.
+5. **Later:** farm biologicals (matching microbes to soils), then insurance and lending once the map is proven.
 
 **Moat:** a multi-year, weekly, DNA-identified record of airborne fungi at fixed tropical sites, each sample tied to its pixel and to signed consent under the Nagoya Protocol and Cali Fund. Satellite data, models and sampler hardware are open to everyone.
 
