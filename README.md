@@ -1,63 +1,168 @@
-# EcoHack
+# Spore Atlas
 
-Map fungal communities by pairing low-cost ground eDNA samplers with satellite habitat embeddings.
+**Mapping the hidden fungi of tropical forests at 10 m, with low-cost airborne eDNA samplers and free satellite embeddings.**
 
-- **Ground:** passive airborne eDNA samplers give dated, sequence-resolved labels at a known location.
-- **Orbit:** Sentinel-1/2 embeddings (TESSERA, AlphaEarth) describe the habitat around each sampler.
-- **Model:** predicts occurrence from habitat. Its uncertainty picks where the next sampler goes.
-- **Graph:** every record carries permit, sample and model-version provenance (TuringDB).
+> **In 100 words.** Fungi are hidden helpers under every forest. They feed trees, store carbon and gave us medicines like penicillin. Yet over 90% have never been named, and the richest rainforests are barely sampled. Satellites can't see fungi, and today's best map is blurry: one dot covers a whole kilometre. Our fix: cheap boxes in the forest catch fungal spores from the air every week. We read their DNA and match each catch to sharp 10 m satellite data. A model learns where fungi live and picks where the next box goes. Next: a 10-site rainforest pilot.
 
-Imagery and embeddings are free. The moat is the growing corpus of dated ground labels and the access agreements behind them.
+<table>
+<tr>
+<td width="50%"><img src="media/sampler.gif" alt="Passive airborne eDNA sampler in a 3D tropical forest"><br><sub><b>The sampler.</b> Rain triggers fruiting, wind carries spores into a sealed weekly cartridge. <a href="media/sampler.mp4">Full tour (MP4)</a></sub></td>
+<td width="50%"><img src="media/landscape.gif" alt="Guided sampler placement on a 3D Amazon landscape"><br><sub><b>The map.</b> Real Amazon habitat and terrain. Uncertainty drives where the next 10, 30, 100 samplers go. <a href="media/landscape.mp4">Full clip (MP4)</a></sub></td>
+</tr>
+</table>
 
-## Setup
+**Run the demo:** open [`package/index.html`](package/index.html) in Chrome. One file, works offline. Presenter flow in [`package/README.md`](package/README.md).
 
-Python 3.13, [uv](https://github.com/astral-sh/uv).
+*Spore Atlas is a working name. Fungal fields in the tropical demo are simulated; see [Evidence](#evidence).*
 
-```bash
-uv venv --python 3.13 .venv
-uv pip install --python .venv/bin/python -r requirements.txt
-source .venv/bin/activate
+---
+
+## Problem
+
+| | |
+|---|---|
+| **Unknown** | ~155,000 fungal species described of an estimated 2 to 3 million: 5 to 8% [1]. In ectomycorrhizal fungi, 79 to 83% of soil DNA matches no named species [2]. |
+| **Unsampled** | The wet tropics hold the most diversity and the fewest samples. Only 9.5% of mycorrhizal richness hotspots are protected [3]. |
+| **Blurry** | The best global map predicts at 1 km [3]. One pixel spans 10,000 cells of 10 m. |
+| **Too slow** | Satellite embeddings such as TESSERA summarise a year [4]. Fungi fruit and sporulate over days. |
+
+## Gap
+
+Habitat at 10 m is now free (TESSERA, AlphaEarth [4, 5]). Fungal labels are not. A 2026 preprint shows satellite embeddings predict ectomycorrhizal richness at 10 m from ~12,000 temperate and boreal soil samples [6]. No one has **dated, sequence-resolved, tropical** labels to do the same where it matters most.
+
+## Approach
+
+```mermaid
+flowchart LR
+  A[Passive air sampler<br/>weekly cartridge] --> B[ITS metabarcoding<br/>species incl. unnamed]
+  C[TESSERA 10 m<br/>128-d embeddings] --> D
+  B --> D[Model<br/>habitat to fungi]
+  D --> E[10 m map<br/>+ uncertainty]
+  E -->|next sampler goes where<br/>the model is least sure| A
 ```
 
-| Package | Use |
+1. **Catch.** Passive samplers collect airborne spores into sealed 7-day cartridges, 12 weeks on solar. Passive capture overtook active samplers on total species after 48 to 96 h in a 2026 trial [7].
+2. **Read.** Each sample is paired with the TESSERA embedding of its pixel plus terrain.
+3. **Learn.** A model predicts fungi everywhere and reports its uncertainty.
+4. **Choose.** Uncertainty-weighted k-means in embedding space places the next batch: informative, and covering every habitat type.
+
+## Evidence
+
+All numbers reproduce from the code in this repo.
+
+### Simulation: real tropical habitat, synthetic fungi
+
+Three 11 x 11 km TESSERA 2024 tiles with Copernicus GLO-30 terrain. A synthetic fungal field (habitat, elevation and a hidden spatial term) and 400 synthetic species with niche ranges from 0.04% to 5% of the landscape. Model: extremely randomised trees on 16 embedding components plus elevation; uncertainty is the spread across 200 trees. Guided vs the better of grid and random, mean of 5 runs.
+
+| Landscape | Species found, 10 samplers | Rare species, 30 | Habitat-balanced error, 10 | Whole-map R², 100 |
+|---|---|---|---|---|
+| Central Amazon, Brazil | **159** vs 112 | **26** vs 21 | **1.02** vs 1.04 | 0.48 vs **0.54** |
+| Budongo Forest, Uganda | **155** vs 127 | **26** vs 22 | **0.93** vs 0.94 | 0.49 vs **0.53** |
+| Osa Peninsula, Costa Rica | **166** vs 134 | **27** vs 23 | **0.91** vs 0.97 | 0.35 vs **0.41** |
+
+**Reading:** guided placement finds more species, more rare species and more habitat types when samplers are scarce, which is the tropical case. With 100 samplers an even grid maps the whole landscape better. Discovery and even coverage need different designs.
+
+### Real data: 66 UK woodlands
+
+Soil fungal diversity at 66 restored and ancient woodlands [8], TESSERA embeddings averaged over each site's 1 km cell, ridge regression, cross-validated R² (20 x 5-fold).
+
+| Predictors | Fungal diversity (Shannon) | Functional groups (FUNGuild) |
+|---|---|---|
+| Soil and site (pH, conductivity, age, land use) | **0.21** | **0.08** |
+| Satellite only | 0.08 | -0.01 |
+| Soil, site and satellite | 0.03 | -0.06 |
+
+**Reading:** satellite embeddings did not help here. 66 sites, coordinates rounded to 1 km, and soil pH dominating limit any 10 m signal. Precisely located, dated samples are what this test needs.
+
+### Limitations
+
+- The core claim, 10 m embeddings plus weekly air DNA beating the 1 km map in the tropics, is untested.
+- Week-long passive sampling and cartridge storage in humid understory are untested.
+- Guided placement helps most at small budgets; its edge shrinks as sampling grows.
+
+## Research that informs this
+
+| Finding | Source |
 |---|---|
-| `turingdb` | Versioned graph DB (Cypher). Embedded or server (`turingdb`, `turingdb -ui`) |
-| `geotessera` | TESSERA 10 m embeddings (128-d, Sentinel-1/2, 2017 to 2025) |
-| `earthengine-api` | AlphaEarth embeddings (64-d). Run `earthengine authenticate` first |
-| `rasterio`, `rioxarray`, `geopandas`, `xarray` | Raster and vector I/O |
-| `pandas`, `pyarrow`, `scikit-learn` | Tables and models |
+| 2 to 3 million fungal species, ~155,000 described | Current Biology review, 2025 [1] |
+| Global mycorrhizal richness predictable at 1 km from ~25,000 soil samples; 9.5% of hotspots protected | Van Nuland et al., *Nature*, 2025 [3] |
+| Satellite embeddings predict ectomycorrhizal richness at 10 m (temperate, soil) | SPUN, GlobalFungi, TESSERA, arXiv 2026 [6] |
+| Airborne fungal DNA works at global scale; tropics richer than temperate; 6 of 47 sites in the Southern Hemisphere | Global Spore Sampling Project, *Nature* 2024, *Sci. Data* 2024 [9, 10] |
+| Passive samplers beat active ones on total species after 48 to 96 h | Jager et al., 2026 [7] |
+| 58 natural-product drugs launched 2014 to mid-2025 | Butler et al., *Nat. Prod. Rep.*, 2026 [11] |
+| $708M median, $1.31B mean per approved drug; $2.23B including failures | RAND, 2025 [12]; Deloitte, 2025 [13] |
+
+## Who pays
+
+1. **Pharma and biotech:** a collection shortlist with location, habitat, consent and permit. Rare and unnamed taxa are the least-screened chemistry.
+2. **Governments:** national fungal monitoring for Kunming-Montreal reporting.
+3. **Farm biologicals:** matching microbial products to soils.
+4. **eDNA and Earth-observation firms:** partners and data buyers.
+5. **Insurance and lending:** later, once the map is proven.
+
+**Moat:** a multi-year, weekly, DNA-identified record of airborne fungi at fixed tropical sites, each sample tied to its pixel and to signed consent under the Nagoya Protocol and Cali Fund. Satellite data, models and sampler hardware are open to everyone.
+
+## Safeguards
+
+- **Location secrecy:** rare species and chemistry hotspots are blurred or withheld.
+- **No false absence:** uncertainty is always published.
+- **Consent and benefit-sharing:** communities co-own data (CARE principles); data stays in-country.
+- **Biosecurity:** handling and release rules for pathogen-bearing samples.
+- **Footprint:** passive, no chemicals, every unit retrieved.
+
+## Roadmap
+
+| When | Milestone | Pass mark |
+|---|---|---|
+| 90 days | Benchmark on public labels vs SPUN 1 km and a climate-only model | Threshold fixed in advance; miss it and stop |
+| 6 months | 10-site tropical pilot with open-source samplers, $15k to $45k | Measured cost per sample, cartridge survival |
+| 12 months | One paying customer | Before any custom hardware |
+
+## Reproduce
+
+```bash
+uv venv --python 3.13 .venv && uv pip install --python .venv/bin/python -r requirements.txt
+export SSL_CERT_FILE=$(.venv/bin/python -m certifi)
+
+# UK benchmark (needs the RestREco packs unzipped in data/raw/)
+.venv/bin/python demo/uk_extract.py && .venv/bin/python demo/uk_model.py
+
+# Tropical simulation (downloads 3 TESSERA tiles, ~0.4 GB)
+.venv/bin/python demo/tropics_sim.py
+
+# Showcase and single-file package
+cp demo/out/*.json showcase/public/data/
+cd showcase && npm install && npm run package   # writes package/index.html
+node record.mjs                                  # re-records media/
+```
+
+| Path | Contents |
+|---|---|
+| `demo/` | UK benchmark and tropical simulation (Python) |
+| `showcase/` | Vite + three.js app: Field, Pitch, Landscape, Evidence |
+| `showcase/src/sampler/` | 3D passive airborne eDNA sampler and forest |
+| `package/` | Single-file offline build and presenter notes |
+| `media/` | Demo recordings |
 
 ## Data
 
-Not committed. Unzip into `data/raw/<name>/` from the hackathon pack.
+- TESSERA v1.1 embeddings, 2021, 2022, 2024 [4]. Copernicus GLO-30 DEM.
+- RestREco woodland datasets, NERC EDS Environmental Information Data Centre: soil metagenomics [8], insects, plants and trees [14], acoustic indices [15]. Unzip into `data/raw/<name>/`; not committed.
 
-All three datasets share site codes (`EW01`, `SW01`, ...): 66 restored and ancient woodlands, Central Scotland 2021 and English Midlands 2022.
+## References
 
-| Dataset | Files | Rows | Content |
-|---|---|---|---|
-| `soil-metagenomics-hibdige` | `woodlands_fungi_data_alpha.csv` | 330 | Fungal Shannon diversity per soil sample, dated |
-| | `woodlands_fungi_data_functional.csv` | 330 | FUNGuild Chao1 per sample |
-| | `woodland_bacterial_data_*.csv` | 330 | Bacterial alpha and functional diversity |
-| | `woodland_soil_data_biochemical.csv` | 66 | pH, conductivity, land use, site age |
-| `insect-plant-tree-woodland-2021-2022` | `woodland_site_details.csv` | 66 | Coordinates, age, area, broadleaf cover at 100 m to 3 km |
-| | `trees.csv`, `deadwood.csv`, `canopy_cover.csv`, `ground_flora.csv`, ... | 330 to 17k | Habitat ground truth, invertebrates |
-| `acoustic-monitoring-barnett` | `acoustic_indices.csv` | 139k | 15 soundscape indices per ~10 min recording, 83 sites |
-
-### Caveats
-
-- Coordinates are British National Grid (EPSG:27700) rounded to 1 km. Aggregate embeddings over the 1 km cell, not a single 10 m pixel.
-- Fungal data is alpha diversity only. No taxa, no sequences, so composition cannot be modelled.
-- Temperate UK only.
-- No airborne eDNA yet. Soil fungal diversity stands in for sampler labels until our own samplers are deployed.
-
-### Sources
-
-- Hibdige et al. (2026), soil metagenomics. [doi:10.5285/a21b8ed1-124b-4b2a-adb4-c3fdcc9f95a2](https://doi.org/10.5285/a21b8ed1-124b-4b2a-adb4-c3fdcc9f95a2)
-- Waddell et al. (2025), insects, plants and trees. [doi:10.5285/8c997943-1f90-4897-87b3-491eaef534ec](https://doi.org/10.5285/8c997943-1f90-4897-87b3-491eaef534ec)
-- Barnett et al. (2025), acoustic indices. [doi:10.5285/33b6dea2-94c5-4e33-a1b3-9a6bd1c8776a](https://doi.org/10.5285/33b6dea2-94c5-4e33-a1b3-9a6bd1c8776a)
-
-### External (not yet downloaded)
-
-- GlobalFungi, Global Soil Mycobiome: taxon-level labels
-- SPUN Underground Atlas: 1 km benchmark
-- WorldClim or CHELSA, SoilGrids: covariate baseline
+1. [Fungal diversity estimates, *Current Biology*, 2025](https://pmc.ncbi.nlm.nih.gov/articles/PMC11687528)
+2. [Dark taxa hotspots of ectomycorrhizal fungi, 2025](https://www.spun.earth/peer-reviewed-papers/mysterious-fungi-researchers-pinpoint-hotspots-of-dark-taxa-across-earths-underground-ecosystems)
+3. [Van Nuland et al., *Nature*, 2025](https://www.nature.com/articles/s41586-025-09277-4)
+4. [TESSERA](https://github.com/ucam-eo/tessera)
+5. [AlphaEarth Foundations embeddings](https://developers.google.com/earth-engine/guides/aef_on_gcs_readme)
+6. [Satellite embeddings and ectomycorrhizal richness at 10 m, arXiv:2604.09818, 2026](https://arxiv.org/abs/2604.09818)
+7. [Jager et al., passive airborne eDNA sampling, 2026](https://repository.naturalis.nl/pub/801981/Jager-2026-A-Breath-of-Fresh-Air-A.pdf)
+8. [Hibdige et al., soil metagenomics, EIDC, 2026](https://doi.org/10.5285/a21b8ed1-124b-4b2a-adb4-c3fdcc9f95a2)
+9. [Global Spore Sampling Project, *Nature*, 2024](https://www.nature.com/articles/s41586-024-07658-9)
+10. [Global Spore Sampling Project data, *Scientific Data*, 2024](https://www.nature.com/articles/s41597-024-03410-0)
+11. [Butler et al., *Nat. Prod. Rep.*, 2026](https://pubs.rsc.org/en/content/articlelanding/2026/np/d5np00031a/unauth)
+12. [RAND drug development costs, *JAMA Netw. Open*, 2025](https://www.news-medical.net/news/20250108/New-research-reframes-the-debate-on-drug-development-costs.aspx)
+13. [Deloitte biopharma innovation, 2025](https://www.swissinfo.ch/eng/healthcare-innovation/why-drugs-are-becoming-more-expensive-to-develop/91851935)
+14. [Waddell et al., insects, plants and trees, EIDC, 2025](https://doi.org/10.5285/8c997943-1f90-4897-87b3-491eaef534ec)
+15. [Barnett et al., acoustic indices, EIDC, 2025](https://doi.org/10.5285/33b6dea2-94c5-4e33-a1b3-9a6bd1c8776a)
