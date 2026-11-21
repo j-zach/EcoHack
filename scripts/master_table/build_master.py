@@ -89,6 +89,13 @@ def main():
             "guild_assigned_read_share": assigned / tot if tot else None,
         })
     df = pd.DataFrame(out)
+    # Provenance guard: this table is England-only (FE 2023). The EIDC record's bounding box is
+    # lon -6.452..1.768, lat 49.864..55.812. Any point outside it means foreign data leaked in.
+    usable = df[(df.coord_source == "sample") & (~df.gps_flagged)]
+    outside = usable[~usable.lon.between(-6.452, 1.768) | ~usable.lat.between(49.864, 55.812)]
+    if len(outside):
+        raise ValueError(f"{len(outside)} usable samples fall outside England's bbox: "
+                         f"{outside['sample'].tolist()[:5]}")
     df.to_csv(OUT / "master.csv", index=False)
 
     n_gen = sum(1 for g, _ in otus if g)

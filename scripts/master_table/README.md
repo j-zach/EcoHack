@@ -24,6 +24,12 @@ LightGBM needs the system `libomp`; this uses scikit-learn's HistGradientBoostin
 3. `tessera_features.py`: 10 m pixel + 3×3 window mean at each sample with its own, unflagged coordinates
 4. `run_models.py`: random 5-fold vs leave-one-site-out, all samples and woodland only → `out/model_results.{csv,md}`
 
+## Data provenance
+**UK only (England).** Every modelled sample comes from the Forestry England 2023 survey: 546 samples,
+21 English sites, lat 50.71–55.30, lon −3.42–1.62. No NEON (US) or other non-UK data is used.
+`build_master.py` fails if any usable sample falls outside the dataset's England bounding box.
+FungalTraits is a global genus→guild lookup table, not site data.
+
 ## Decisions
 - **Coordinates:** 588/656 latitudes have 6 dp (~0.1 m as recorded); no rounding/offsetting note.
   Each sample is a 9-core composite from a 10 m × 10 m plot taken by handheld GPS, so the 3×3 (30 m)
