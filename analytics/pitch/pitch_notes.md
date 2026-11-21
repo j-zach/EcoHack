@@ -67,7 +67,7 @@ The README and showcase on `main` (commit 7e2c345) pitch the idea as "Spore Atla
 | Topic | `main` README / showcase | This deck | If the team prefers `main` |
 |---|---|---|---|
 | Lead product | Sampler first, tropical forests | Software first (Neroche demo, UK data); sampler as future hardware, per the brief | Swap cards 5 and 8 and open the demo on the sampler tour |
-| Pharma | "Pharma revenue keeps it running" | Left out: the earlier steer was health, crop yield and biodiversity, not pharma | Add a row to card 7: *Natural-product discovery (revenue): where to collect, with consent and benefit-sharing* |
+| Pharma | "Pharma revenue keeps it running" | **Decided 21 Nov: pharma stays out.** Focus is health, crop yield and biodiversity | Update the showcase's Pitch tab and README "Who pays" to match, or don't show that tab |
 | Name | Spore Atlas (working name) | Spora, matching the template and logo | Replace the name throughout |
 | Satellite | AlphaEarth and TESSERA | Tessera only. The 64% week-to-week figure needs no satellite data, so it's safe either way | — |
 | Cost per sample | "About $4 chemistry, ~$150–500 commercial" | $45–62 at a university sequencing lab (Oregon State external rates), fieldwork excluded | Use one figure. Both say the same thing: fieldwork is the cost |
