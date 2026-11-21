@@ -11,3 +11,4 @@ node_modules/
 showcase/dist/
 showcase/public/data/
 demo/viewer/
+showcase/.frames-*/
