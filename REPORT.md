@@ -8,7 +8,7 @@ The prompts for the evidence graph are in [`prompts/evidence_graph_prompts.md`](
 
 - **Status:** the evidence graph currently recommends **woodland ectomycorrhizal (EcM) decline in England**, with Forestry England soil eDNA as the ground truth (see [Evidence graph status](#evidence-graph-status)).
 - **NEON (US):** NEON has taxon-level soil fungal tables at 47 sites, which the hackathon pack lacks (it only has alpha diversity). In 2023–2024 (4,018 samples, 31 sites), the EcM fungus *Cenococcum* is in 26% of samples and *Alternaria* in 57%, so both can be modelled. *Coccidioides* is in 2 samples, too rare. Downloads need a free NEON account and API token.
-- **Satellite:** Tessera, AlphaEarth and OlmoEarth all publish free annual 10 m embeddings. Comparing them under the same spatial validation is cheap and hasn't been done for fungi.
+- **Satellite:** we use **Tessera only** (decided 21 Nov). It's the same feature set Young et al. used, so our spatial validation compares like with like. AlphaEarth and OlmoEarth were checked but aren't used.
 - **Amass:** it indexes biomedical sources only, so it suits the health link rather than the fungal ecology. The Amass prize wants the ecosystem → human-health chain, with the records each step rests on.
 - **Air eDNA:** NEON has none. The air layer has to come from the Global Spore Sampling Project, a US airborne-fungi study, or the UK survey authors.
 - **Out of scope:** wildfire and other natural-disaster framings, and pharmaceutical bioprospecting. Drought and warming stay in only as gradual drivers of fungal change, not as disasters.
@@ -48,8 +48,11 @@ Source: NEON's API catalogue and the [NEON Data API docs](https://github.com/NEO
 | Access | `geotessera` | Earth Engine account (free for research and nonprofit) | Anonymous Zarr download from Source Cooperative |
 | Licence | | CC BY 4.0 | OlmoEarth Artifact License |
 
-- OlmoEarth has no point-lookup helper. Convert each longitude/latitude to its UTM zone row and column, then read that pixel. See the [export docs](https://docs.olmoearth.allenai.org/exporting-embeddings/). The OlmoEarth Platform needs an access request, so don't depend on it.
-- All three overlap with NEON's taxonomy tables in **2023 to 2024**. Older NEON samples lose OlmoEarth unless it covers the US for those years.
+- **Decision (21 Nov): Tessera only.** We don't combine or compare the three. Reasons:
+  - Young et al. used Tessera, so if our spatial validation scores lower, the drop can't be blamed on different features.
+  - `geotessera` samples embeddings at points without downloading whole tiles.
+  - It covers 2017 to 2025, so every NEON and Forestry England sample year has a matching embedding.
+  - It needs no account. AlphaEarth needs Earth Engine, and OlmoEarth has no point-lookup helper.
 - The hackathon pack's coordinates are rounded to 1 km, so its embeddings must be averaged over the 1 km cell (see the README).
 
 ### Air eDNA alternatives
@@ -127,7 +130,7 @@ These results come from the team's local TuringDB graph, built with the original
   - All 656 samples have latitude and longitude, and 558 join to the fungal table at sample level.
   - EcM genera are widespread: *Russula* in 236 samples, *Lactarius* in 214, *Tomentella* in 160.
   - Pathogens are thin. *H. fraxineus* is in 3 samples at one site, and the *Ramularia* and *Leptosphaeria* hits are non-crop species.
-- **Overlap with prior work:** B overlaps Young et al.'s core claim. Our novelty has to come from spatial validation, England ground truth, the guild-balance target, and the three-embedding comparison.
+- **Overlap with prior work:** B overlaps Young et al.'s core claim. Our novelty has to come from spatial validation, England ground truth, the guild-balance target, and a UK-to-US transfer test.
 
 The revised prompts add the US and NEON, a human-health layer for the Amass prize, and hard gates that include detection rate. Rerunning them rebuilds the graph.
 
@@ -150,11 +153,24 @@ The revised prompts add the US and NEON, a human-health layer for the Amass priz
 ## Open items
 
 - [x] NEON detection-rate check for 2023–2024 (see [NEON detection rates](#neon-detection-rates-20232024)).
-- [ ] Join NEON sample coordinates (DP1.10086.001) and pull the three embeddings at NEON sample locations.
+- [ ] Join NEON sample coordinates (DP1.10086.001) and pull Tessera embeddings at NEON sample locations.
 - [ ] Rerun the revised prompts 1 to 4 against the graph.
 - [ ] Email Clare and Littlefair for the UK air eDNA ASV table.
 - [ ] Decide whether the local graph code joins this repo.
 - [ ] Confirm the judging panel; earlier notes list Echo Labs as a partner, not a judge.
+
+## Pushing work to this repo
+
+Run this from the repo folder to commit and push to a topic branch:
+
+```bash
+scripts/push_branch.sh <branch> "<commit message>" [paths...]
+```
+
+- **New branch:** if it doesn't exist yet, it's created from the latest `main`.
+- **Existing branch:** if a teammate already pushed it, their commits are pulled in first.
+- **Safety:** it refuses to push to `main` and refuses anything that looks like an API token.
+- **Output:** it prints a compare link you can use to open a pull request.
 
 ## Sources
 
