@@ -48,13 +48,37 @@ flowchart LR
 ```
 
 1. **Catch.** Passive samplers collect airborne spores into sealed 7-day cartridges, 12 weeks on solar. Passive capture overtook active samplers on total species after 48 to 96 h in a 2026 trial [7].
-2. **Read.** Each sample is paired with the TESSERA embedding of its pixel plus terrain.
+2. **Read.** Each sample is paired with a 10 m embedding of its landscape: TESSERA where covered, AlphaEarth everywhere, plus terrain and soil.
 3. **Learn.** A model predicts fungi everywhere and reports its uncertainty.
 4. **Choose.** Uncertainty-weighted k-means in embedding space places the next batch: informative, and covering every habitat type.
 
 ## Evidence
 
 All numbers reproduce from the code in this repo.
+
+### Real data: airborne fungal DNA at 47 sites
+
+The Global Spore Sampling Project [9, 10] ran air samplers at 47 sites from 2018 to 2021: 1,630 to 2,400 dated samples, fungi identified by DNA to genus. 8 sites are tropical or subtropical, including Panama, Cameroon, Kenya and Madagascar. We pair each site with a 10 m satellite embedding of the 1 km around it (AlphaEarth [5], which covers every site; TESSERA [4] covers 17), SoilGrids soil [16] and Copernicus terrain. Leave-one-site-out ridge regression on log richness.
+
+**When.** 79% of the variation in sample richness is within a site over time. Seasons explain 15%; **64% is week-to-week change** that any annual embedding, TESSERA or AlphaEarth, cannot see by construction. This is the gap weekly samplers fill.
+
+**Where.**
+
+| Predictors | R² | Sites |
+|---|---|---|
+| Latitude only | -0.04 | 37 |
+| Latitude, terrain and soil (SoilGrids) | -0.10 | 37 |
+| **AlphaEarth 10 m embedding** | **0.15** | 37 |
+| Latitude, terrain, soil and AlphaEarth | 0.04 | 37 |
+| **AlphaEarth 10 m embedding** | **0.15** | 47 |
+
+| Head-to-head, same 17 sites | R² |
+|---|---|
+| Latitude and terrain | -0.23 |
+| AlphaEarth (64-d) | -0.23 |
+| TESSERA (128-d) | -0.24 |
+
+**Reading:** the 10 m embedding is the only predictor that carries signal on airborne fungi; soil and latitude do not. The signal is modest and the head-to-head is inconclusive at 17 sites, mostly European. More sites, not better models, is the bottleneck. SPUN's 1 km map joins as a baseline when its GeoTIFFs are placed in `data/spun/` (available on request [17]).
 
 ### Simulation: real tropical habitat, synthetic fungi
 
@@ -82,7 +106,7 @@ Soil fungal diversity at 66 restored and ancient woodlands [8], TESSERA embeddin
 
 ### Limitations
 
-- The core claim, 10 m embeddings plus weekly air DNA beating the 1 km map in the tropics, is untested.
+- The core claim, 10 m embeddings plus weekly air DNA beating the 1 km map in the tropics, is untested: 8 tropical sites is too few, and SPUN's map is not yet in the benchmark.
 - Week-long passive sampling and cartridge storage in humid understory are untested.
 - Guided placement helps most at small budgets; its edge shrinks as sampling grows.
 
@@ -93,7 +117,7 @@ Soil fungal diversity at 66 restored and ancient woodlands [8], TESSERA embeddin
 | 2 to 3 million fungal species, ~155,000 described | Current Biology review, 2025 [1] |
 | Global mycorrhizal richness predictable at 1 km from ~25,000 soil samples; 9.5% of hotspots protected | Van Nuland et al., *Nature*, 2025 [3] |
 | Satellite embeddings predict ectomycorrhizal richness at 10 m (temperate, soil) | SPUN, GlobalFungi, TESSERA, arXiv 2026 [6] |
-| Airborne fungal DNA works at global scale; tropics richer than temperate; 6 of 47 sites in the Southern Hemisphere | Global Spore Sampling Project, *Nature* 2024, *Sci. Data* 2024 [9, 10] |
+| Airborne fungal DNA works at global scale; tropics richer than temperate; 6 of 47 sites in the Southern Hemisphere; our real-data benchmark uses its open data | Global Spore Sampling Project, *Nature* 2024, *Sci. Data* 2024 [9, 10] |
 | Passive samplers beat active ones on total species after 48 to 96 h | Jager et al., 2026 [7] |
 | 58 natural-product drugs launched 2014 to mid-2025 | Butler et al., *Nat. Prod. Rep.*, 2026 [11] |
 | $708M median, $1.31B mean per approved drug; $2.23B including failures | RAND, 2025 [12]; Deloitte, 2025 [13] |
@@ -133,6 +157,10 @@ export SSL_CERT_FILE=$(.venv/bin/python -m certifi)
 # UK benchmark (needs the RestREco packs unzipped in data/raw/)
 .venv/bin/python demo/uk_extract.py && .venv/bin/python demo/uk_model.py
 
+# Real airborne DNA benchmark (GSSP archive from ipt.gbif.org/resource?r=tim-spores into data/gssp/,
+# AlphaEarth index from storage.googleapis.com/alphaearth_foundations/.../aef_index.parquet into data/aef/)
+cd demo && ../.venv/bin/python gssp_tessera.py && ../.venv/bin/python gssp_benchmark.py && cd ..
+
 # Tropical simulation (downloads 3 TESSERA tiles, ~0.4 GB)
 .venv/bin/python demo/tropics_sim.py
 
@@ -144,7 +172,8 @@ node record.mjs                                  # re-records media/
 
 | Path | Contents |
 |---|---|
-| `demo/` | UK benchmark and tropical simulation (Python) |
+| `demo/` | Real airborne DNA benchmark, UK benchmark, tropical simulation (Python) |
+| `analytics/` | Team work: master table, demo frontend, data access report |
 | `showcase/` | Vite + three.js app: Field, Pitch, Landscape, Evidence |
 | `showcase/src/sampler/` | 3D passive airborne eDNA sampler and forest |
 | `package/` | Single-file offline build and presenter notes |
@@ -152,7 +181,8 @@ node record.mjs                                  # re-records media/
 
 ## Data
 
-- TESSERA v1.1 embeddings, 2021, 2022, 2024 [4]. Copernicus GLO-30 DEM.
+- TESSERA v1.1 embeddings [4] and AlphaEarth Foundations annual embeddings [5] (CC-BY 4.0, produced by Google and Google DeepMind). Copernicus GLO-30 DEM. SoilGrids 2.0 [16].
+- Global Spore Sampling Project airborne fungal DNA, CC-BY 4.0 [10].
 - RestREco woodland datasets, NERC EDS Environmental Information Data Centre: soil metagenomics [8], insects, plants and trees [14], acoustic indices [15]. Unzip into `data/raw/<name>/`; not committed.
 
 ## References
@@ -172,3 +202,5 @@ node record.mjs                                  # re-records media/
 13. [Deloitte biopharma innovation, 2025](https://www.swissinfo.ch/eng/healthcare-innovation/why-drugs-are-becoming-more-expensive-to-develop/91851935)
 14. [Waddell et al., insects, plants and trees, EIDC, 2025](https://doi.org/10.5285/8c997943-1f90-4897-87b3-491eaef534ec)
 15. [Barnett et al., acoustic indices, EIDC, 2025](https://doi.org/10.5285/33b6dea2-94c5-4e33-a1b3-9a6bd1c8776a)
+16. [SoilGrids 2.0, ISRIC](https://docs.isric.org/globaldata/soilgrids/)
+17. [SPUN data request](https://www.spun.earth/data-request)
