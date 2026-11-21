@@ -134,6 +134,44 @@ These results come from the team's local TuringDB graph, built with the original
 
 The revised prompts add the US and NEON, a human-health layer for the Amass prize, and hard gates that include detection rate. Rerunning them rebuilds the graph.
 
+## Costs
+
+### What the problem costs
+
+There is no published £ figure for mycorrhizal (EcM) decline itself. The cost case rests on what woodland fungi underpin and on what fungal threats to trees already cost.
+
+| What | Figure | Source |
+|---|---|---|
+| Ash dieback, a fungal tree disease, in Britain | £14.8bn over 100 years. More than half (£7.6bn) falls within 10 years, and £4.8bn of it is clean-up such as felling dangerous roadside trees. Proactive management could cut £2.5bn | Hill et al. 2019, *Current Biology* |
+| Six introduced tree pests and pathogens at epidemic levels | About £920m a year to the UK economy | Cited by the Woodland Trust (Oct 2024); the original study isn't named |
+| UK trees and woods as an asset | £382bn | ONS figure, via the Woodland Trust (Jun 2024). Defra's 2018 partial estimate was £175bn |
+| Carbon flowing through mycorrhizal fungi worldwide | About 13.1 Gt CO2e a year, roughly 36% of fossil-fuel CO2 emissions; 9.1 Gt of it goes to EcM fungi | Hawkins et al. 2023, *Current Biology*. This is a flow, not permanent storage |
+
+### Per-sample eDNA cost
+
+**Lab cost per sample (soil fungal ITS):** using Oregon State's genomics core price list at external rates (CQLS, accessed 21 Nov 2026). A commercial provider would cost more.
+
+| Step | Per sample | Basis |
+|---|---|---|
+| Soil DNA extraction | $18.80 | $1,804.47 per 96-sample PowerSoil plate |
+| ITS amplicon library prep | $19.14 | Earth Microbiome Project protocol, batches of 48 to 96 |
+| Sequencing | $18.13 at 96 samples per run; $4.53 at 384 | $1,740.76 per MiSeq i100 run (300 bp paired-end, 25M reads) |
+| Bioinformatics | About $6 at 96 samples; $1.50 at 384 | Our assumption: 4 hours at $145.50 an hour per run |
+| **Lab total** | **About $45 to $62** | |
+
+- **Cross-checks:**
+  - Other US cores list soil extraction at $6.50 to $29.40.
+  - NDSU lists 16S + ITS on the same sample at $46.50 or $67.43, before extraction.
+- **Not included:**
+  - Fieldwork: staff time and travel to sites, usually the largest cost for remote sites.
+  - Shipping on dry ice, which one vendor puts at $80 to $200 per domestic shipment.
+  - Commercial margin. NatureMetrics and others quote per project and don't publish prices.
+- **Air eDNA:** the lab cost per filter is in the same range. Collection can be almost free if we reuse the filters existing air-quality samplers already collect, as the UK airborne survey did with 15 Defra PM10 sites. Open-source passive samplers are another option; we didn't find a published price for them.
+- **Survey scale, lab cost only:**
+  - Forestry England's 2023 survey (656 samples): about $30k to $41k.
+  - One year of NEON fungal samples (2,071 in 2023): about $93k to $128k.
+- **Pitch logic:** each sample costs tens of dollars in the lab, plus fieldwork. So national surveys stay sparse, one-off snapshots. A satellite model is worth paying for only if it fills the gaps between samples reliably. Our leave-one-site-out scores are still modest (see the master-table branch), so don't claim cost savings yet.
+
 ## Research or startup
 
 - **Who pays:** whoever loses money when the fungus spreads.
@@ -180,5 +218,11 @@ scripts/push_branch.sh <branch> "<commit message>" [paths...]
 - [AlphaEarth Satellite Embedding](https://developers.google.com/earth-engine/datasets/catalog/GOOGLE_SATELLITE_EMBEDDING_V1_ANNUAL)
 - [Amass for EcoHack](https://amass.tech/ecohack-london) and [pricing](https://platform.amass.tech/documentation/getting-started/pricing)
 - [TuringDB docs](https://docs.turingdb.ai)
+- [Ash dieback is predicted to cost £15 billion in Britain](https://ox.ac.uk/node/1520363) (Hill et al. 2019)
+- [Woodland Trust on tree pests and nurseries](https://www.woodlandtrust.org.uk/press-centre/2024/10/support-home-grown-tree-nurseries-to-reduce-disease-risk/) and [a £382 billion asset](https://woodlandtrust.org.uk/press-centre/2024/06/a-382-billion-asset-why-uk-trees-need-better-protection-and-urgent-investment)
+- [Defra Tree Health Resilience Strategy 2018](https://assets.publishing.service.gov.uk/media/5b06a40e40f0b61f92a72a16/tree-health-resilience-strategy.pdf)
+- [Hawkins et al. 2023, mycorrhizal mycelium as a global carbon pool](https://eprints.whiterose.ac.uk/199952)
+- [Oregon State CQLS service fees](https://cqls.oregonstate.edu/cqls-service-fees) (extraction, library prep, sequencing)
+- [NDSU sequencing fees](https://www.ndsu.edu/%69%6E%64%65%78.%70%68%70/biotech-innovation-core/sequencing/services-and-fees), [Iowa microbiome core](https://microbiomecore.sites.uiowa.edu/node/11), [Texas A&M Corpus Christi genomics](https://www.tamucc.edu/science/research/genomics/services-and-pricing.php)
 - [Global Spore Sampling Project](https://par.nsf.gov/biblio/10556092) and [Abrego et al. 2024](https://par.nsf.gov/biblio/10556090)
 - [*Coccidioides* soil community study](https://pubmed.ncbi.nlm.nih.gov/40278129/)
