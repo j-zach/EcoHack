@@ -11,6 +11,7 @@ The prompts for the evidence graph are in [`prompts/evidence_graph_prompts.md`](
 - **Satellite:** Tessera, AlphaEarth and OlmoEarth all publish free annual 10 m embeddings. Comparing them under the same spatial validation is cheap and hasn't been done for fungi.
 - **Amass:** it indexes biomedical sources only, so it suits the health link rather than the fungal ecology. The Amass prize wants the ecosystem → human-health chain, with the records each step rests on.
 - **Air eDNA:** NEON has none. The air layer has to come from the Global Spore Sampling Project, a US airborne-fungi study, or the UK survey authors.
+- **Out of scope:** wildfire and other natural-disaster framings, and pharmaceutical bioprospecting. Drought and warming stay in only as gradual drivers of fungal change, not as disasters.
 
 ## Data access (checked 21 Nov 2026)
 

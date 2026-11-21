@@ -15,7 +15,7 @@ These revise the first versions, which built the team's current local graph. The
 - Sources that Amass doesn't index (arXiv, datasets) have a fallback.
 - NEON and the US are included.
 - There is a new health-layer prompt.
-- Pharma and wildfire are out. Asthma (*Alternaria*) and Valley fever (*Coccidioides*) are in.
+- Pharma, wildfire and other natural-disaster framings are out. Asthma (*Alternaria*) and Valley fever (*Coccidioides*) are in.
 - Scoring starts with hard gates, including detection rate.
 
 ## Prompt 1: build the evidence graph
@@ -112,7 +112,7 @@ Using the fungal_evidence graph in TuringDB, score these candidate problems sepa
 (C) Mycorrhizal decline — Cenococcum geophilum and EcM fungi in woodland
 (D) Airborne allergenic fungi and asthma — Alternaria
 (E) Soil-to-dust human pathogen — Coccidioides (Valley fever)
-Pharmaceutical bioprospecting and wildfire are out of scope.
+Out of scope: pharmaceutical bioprospecting, wildfire and other natural disasters (floods, storms). Drought and warming count only as gradual drivers of fungal change.
 
 Pass region and taxon names as parameters. RETURN properties, not nodes. Show every Cypher query you ran.
 
