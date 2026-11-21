@@ -194,3 +194,4 @@ tr.later .tag { display: inline-block; margin: 4px 0 0 0; line-height: 1.2; }
 .phead { container-type: inline-size; }
 .h1 .lead { font-size: 2.5cqi; }
 .h1 .hl { margin-top: .3em; font-size: 1.86cqi; line-height: 1.2; }
+td .tag { display: inline-block; margin: 4px 0 0 0; line-height: 1.2; }
