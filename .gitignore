@@ -1,2 +1,13 @@
 .venv/
 data/raw/
+data/tessera/
+data/*.parquet
+data/*.log
+data/*.csv
+demo/out/
+demo/viewer/data/
+__pycache__/
+node_modules/
+showcase/dist/
+showcase/public/data/
+demo/viewer/
