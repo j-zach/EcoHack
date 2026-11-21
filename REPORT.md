@@ -7,7 +7,7 @@ The prompts for the evidence graph are in [`prompts/evidence_graph_prompts.md`](
 ## Summary
 
 - **Status:** the evidence graph currently recommends **woodland ectomycorrhizal (EcM) decline in England**, with Forestry England soil eDNA as the ground truth (see [Evidence graph status](#evidence-graph-status)).
-- **NEON (US):** NEON has taxon-level soil fungal tables at 47 sites, which the hackathon pack lacks (it only has alpha diversity). Downloads now need a free NEON account and API token.
+- **NEON (US):** NEON has taxon-level soil fungal tables at 47 sites, which the hackathon pack lacks (it only has alpha diversity). In 2023–2024 (4,018 samples, 31 sites), the EcM fungus *Cenococcum* is in 26% of samples and *Alternaria* in 57%, so both can be modelled. *Coccidioides* is in 2 samples, too rare. Downloads need a free NEON account and API token.
 - **Satellite:** Tessera, AlphaEarth and OlmoEarth all publish free annual 10 m embeddings. Comparing them under the same spatial validation is cheap and hasn't been done for fungi.
 - **Amass:** it indexes biomedical sources only, so it suits the health link rather than the fungal ecology. The Amass prize wants the ecosystem → human-health chain, with the records each step rests on.
 - **Air eDNA:** NEON has none. The air layer has to come from the Global Spore Sampling Project, a US airborne-fungi study, or the UK survey authors.
@@ -75,16 +75,47 @@ Source: NEON's API catalogue and the [NEON Data API docs](https://github.com/NEO
 
 ## Candidate species
 
-| Species | Impact | NEON soil data | Human-health records (Amass) | UK relevance |
+| Species | Impact | NEON soil, 2023–2024 | Human-health records (Amass) | UK relevance |
 |---|---|---|---|---|
-| *Coccidioides* (Valley fever) | Human disease; range spreading with climate | Risky: a 2023 California survey found it in rodent burrows but not farm soil | Very strong (trials, drugs, human genes) | None |
-| *Alternaria* | Allergy and asthma; crop leaf spot | Likely common | Strong | Yes |
-| *Cenococcum geophilum* | Most widespread EcM fungus; drought indicator | Likely at forest sites | Almost none | Yes |
-| *Fusarium* (head blight) | Crop losses and mycotoxins | ITS can't separate species; few NEON sites are farmland | Moderate | Yes |
-| *Hymenoscyphus fraxineus* (ash dieback) | Kills UK ash | Not in North America | None | Strong |
+| *Coccidioides* (Valley fever) | Human disease; range spreading with climate | 0.1%: 2 samples, both at Santa Rita, Arizona (SRER). Too rare to model | Very strong (trials, drugs, human genes) | None |
+| *Alternaria* | Allergy and asthma; crop leaf spot | 57% at genus level, all 31 sites. Species can't be resolved | Strong | Yes |
+| *Cenococcum geophilum* | Most widespread EcM fungus; drought indicator | 26%, at 26 of 31 sites (forests). NEON names it to genus only, which is effectively this species complex | Almost none | Yes |
+| *Fusarium* (head blight) | Crop losses and mycotoxins | 75% at genus level, but no confident *F. graminearum* | Moderate | Yes |
+| *Hymenoscyphus fraxineus* (ash dieback) | Kills UK ash | Not found. NEON's *Hymenoscyphus* hits are other species, mostly *H. pusillus* | None | Strong |
 
-- ITS amplicons identify *Alternaria* and *Fusarium* only to genus, so any claim about them is genus-level.
-- **Pending:** the share of NEON samples containing each candidate. A taxon found in under about 5% of samples can't support a model by Sunday. This is gate G2 in Prompt 3.
+A taxon found in under about 5% of samples can't support a model by Sunday (gate G2 in Prompt 3). By that test, *Coccidioides* and every species-level pathogen fail in NEON, while *Cenococcum* and *Alternaria* pass.
+
+### NEON detection rates (2023–2024)
+
+- **Data:** all 4,019 per-sample fungal (ITS) tables for 2023–2024, 1.1 GB, which is 4,018 soil samples at 31 sites. NEON samples a rotating subset of its 47 sites each year.
+- **Presence rule:** the genus is assigned with confidence ≥ 0.8 and has at least 2 reads.
+- **Reproduce:** the scripts are in [`scripts/neon/`](scripts/neon/) and the tables in [`results/neon_2023_2024/`](results/neon_2023_2024/), including counts by site and by year.
+
+| Genus | Samples with it | Share | Sites | Median share of reads where present |
+|---|---|---|---|---|
+| *Coccidioides* | 2 | 0.1% | 1 | 0.11% |
+| *Alternaria* | 2,295 | 57.1% | 31 | 0.13% |
+| *Cenococcum* | 1,026 | 25.5% | 26 | 0.03% |
+| *Fusarium* | 3,023 | 75.2% | 31 | 0.67% |
+| *Hymenoscyphus* | 318 | 7.9% | 22 | 0.01% |
+| *Aspergillus* | 3,129 | 77.9% | 31 | 0.21% |
+| *Ramularia* | 642 | 16.0% | 24 | 0.01% |
+| *Leptosphaeria* | 532 | 13.2% | 18 | 0.04% |
+| *Russula* (common EcM, for reference) | 2,063 | 51.3% | 29 | 2.48% |
+| *Cladosporium* (common airborne fungus, for reference) | 3,619 | 90.1% | 31 | 0.08% |
+
+What this means:
+
+- **The mycorrhizal target works in both countries.** *Cenococcum* and *Russula* are common at NEON forest sites, as EcM genera are in the Forestry England data (*Russula* in 236 samples). The same target on both sides of the Atlantic allows a UK-to-US transfer test, which Young et al. didn't do.
+- **The health layer can use *Alternaria*, but only at genus level.** Soil is a reservoir; people are exposed through the air. So health claims need the air layer, not soil alone.
+- ***Coccidioides* is a pitch anecdote, not a model.** Both detections are at one Arizona site, inside the known endemic zone.
+- **Species-level pathogens fail.** There is no confident *F. graminearum*, *A. fumigatus* or *H. fraxineus*. In a 10% subsample of files, NEON's species confidence was low for *Fusarium* (median 0.48) and *Alternaria* (0.74).
+- **Caveats:**
+  - These are presence rates from read counts, not abundance.
+  - NEON's reference database names taxa down to species even at low confidence. That's why counting any assignment, regardless of confidence, gives much higher rates for some genera: *Hymenoscyphus* rises from 8% to 43%.
+- **Not done yet:**
+  - Joining sample coordinates from DP1.10086.001.
+  - The earlier years, 2016–2022, which are another 1.75 GB.
 
 ## Evidence graph status
 
@@ -118,7 +149,8 @@ The revised prompts add the US and NEON, a human-health layer for the Amass priz
 
 ## Open items
 
-- [ ] NEON API token, then the detection-rate check for the candidate species.
+- [x] NEON detection-rate check for 2023–2024 (see [NEON detection rates](#neon-detection-rates-20232024)).
+- [ ] Join NEON sample coordinates (DP1.10086.001) and pull the three embeddings at NEON sample locations.
 - [ ] Rerun the revised prompts 1 to 4 against the graph.
 - [ ] Email Clare and Littlefair for the UK air eDNA ASV table.
 - [ ] Decide whether the local graph code joins this repo.

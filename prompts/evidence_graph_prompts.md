@@ -67,7 +67,7 @@ KNOWN TRAPS — record what you find, don't paper over it
 - GlobalFungi may already contain NEON samples. Check and record it: duplicates would leak across validation folds.
 - FungalTraits labels genera; it is a lookup table, not samples.
 - validation_type comes from the methods section. If you can't see the methods, set it null; don't guess.
-- Leave DETECTS.prevalence null unless it was measured; we will fill it from our own data check.
+- For the NEON dataset, fill DETECTS.prevalence and n_positive_samples from results/neon_2023_2024/prevalence.csv in the EcoHack repo (columns prevalence_confident, samples_confident; 4,018 samples, 2023–2024). Leave prevalence null for other datasets unless it was measured.
 
 CLAIMS TO VERIFY (mark each verified / contradicted / not found, with the source)
 1. Young et al.: R² ≈ 0.55 for EcM richness from Tessera, random 70/10/20 split, not spatial CV.
