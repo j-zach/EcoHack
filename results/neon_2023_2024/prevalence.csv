@@ -1,0 +1,11 @@
+genus,samples_confident,prevalence_confident,samples_any,prevalence_any,sites_confident,median_rel_abund_pct_in_positives,species_checked,samples_species_confident
+Coccidioides,2,0.0005,2,0.0005,1,0.105,,
+Alternaria,2295,0.5712,2295,0.5712,31,0.127,Alternaria alternata,0
+Cenococcum,1026,0.2554,1095,0.2725,26,0.031,Cenococcum geophilum,0
+Fusarium,3023,0.7524,3024,0.7526,31,0.667,Fusarium graminearum,0
+Hymenoscyphus,318,0.0791,1738,0.4326,22,0.007,Hymenoscyphus fraxineus,0
+Aspergillus,3129,0.7787,3420,0.8512,31,0.21,Aspergillus fumigatus,0
+Ramularia,642,0.1598,1781,0.4433,24,0.006,,
+Leptosphaeria,532,0.1324,534,0.1329,18,0.037,,
+Russula,2063,0.5134,2230,0.555,29,2.483,,
+Cladosporium,3619,0.9007,3630,0.9034,31,0.082,,
