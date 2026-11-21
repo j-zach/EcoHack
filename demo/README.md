@@ -19,12 +19,17 @@ Pick any of the 21 sites to see held-out predictions at its sample points. The w
 is exported for Neroche only.
 
 ## Run
-The data file is not committed (repo rule: code only). Generate it, then open the page:
+`demo/data/demo_data.js` (2.2 MB) is committed, so the page opens straight from the repo:
+```bash
+open demo/index.html                  # or demo/index.html?autoplay to start the walkthrough immediately
+```
+It contains only derived outputs: held-out predictions, per-site metrics and the Neroche 10 m map, plus the
+sample coordinates and observed EcM richness from the Forestry England data (OGL v3; the attribution is in
+the page footer). To regenerate it after re-running the pipeline:
 ```bash
 cd scripts/master_table
 PY=python ./run_all.sh                                   # builds out/ (see its README for inputs)
 python export_demo_data.py --out ../../demo/data/demo_data.js   # ~2 MB; Neroche map needs ~1 GB RAM
-open ../../demo/index.html            # or index.html?autoplay to start the walkthrough immediately
 ```
 Static files only: no server and no build step. It loads Leaflet 1.9.4 from cdnjs and Esri's gray
 canvas basemap, so it needs an internet connection. Works in light and dark mode (◐ toggles).
