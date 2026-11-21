@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { loadData } from './data.js';
 
 const REGIONS = [['amazon', 'Central Amazon'], ['budongo', 'Budongo, Uganda'], ['osa', 'Osa, Costa Rica']];
 const SAMPLES = { 0: 10, 2: 30, 9: 100 };
@@ -148,7 +149,7 @@ export function startLandscape() {
   async function select(key) {
     state.key = key;
     document.querySelectorAll('#rtabs button').forEach((b) => b.setAttribute('aria-selected', b.dataset.k === key));
-    if (!state.data[key]) state.data[key] = await (await fetch(`data/${key}.json`)).json();
+    if (!state.data[key]) state.data[key] = await loadData(key);
     buildMesh(state.data[key]); frame(); render();
   }
   for (const [k, name] of REGIONS) {

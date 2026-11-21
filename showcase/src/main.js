@@ -1,6 +1,7 @@
 import './shell.css';
 import { startSampler } from './sampler/main.js';
 import { startLandscape } from './landscape.js';
+import { loadData } from './data.js';
 
 const TABS = ['field', 'pitch', 'landscape', 'evidence'];
 const $ = (id) => document.getElementById(id);
@@ -34,8 +35,7 @@ let filled = false;
 show(location.hash.slice(1));
 async function fillEvidence() {
   if (filled) return; filled = true;
-  const get = (k) => fetch(`data/${k}.json`).then((r) => r.json());
-  const [uk, ...regions] = await Promise.all(['uk', 'amazon', 'budongo', 'osa'].map(get));
+  const [uk, ...regions] = await Promise.all(['uk', 'amazon', 'budongo', 'osa'].map(loadData));
   const t = uk.targets, cap = (s) => s[0].toUpperCase() + s.slice(1);
   $('ukTable').querySelector('tbody').innerHTML = Object.keys(t.shannon_entropy).map((k) =>
     `<tr><td>${cap(k)}</td><td class="n">${t.shannon_entropy[k].r2.toFixed(2)}</td><td class="n">${t.funguild_chao1[k].r2.toFixed(2)}</td></tr>`).join('');
