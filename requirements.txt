@@ -11,3 +11,5 @@ pyarrow==26.0.1
 scikit-learn==1.9.1
 jupyterlab==4.6.6
 pyproj==3.8.0
+scipy==1.18.1
+pillow==13.0.0
