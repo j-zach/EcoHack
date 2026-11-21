@@ -6,11 +6,11 @@ About 640 spoken words. The order runs problem, solution, scientific validity, f
 
 ## 1. Problem (0:00 – 0:35)
 
-One fungus is expected to kill at least 80% of Britain's ash trees.
+Six in ten trees on Earth depend on one group of fungi. Ectomycorrhizal fungi wrap around tree roots and supply water and nutrients in exchange for sugar.
 
-That's ash dieback. 955 species use ash, and 44 of them live on nothing else. The bill to Britain is £14.8 billion.
+In Britain, those trees include our native oaks. 2,300 species live on oak, and 326 of them live nowhere else.
 
-And it isn't just ash. Only 7% of the UK's native woodland is in good ecological condition, and more than half of woodland plants and animals are in decline.
+That partnership is under strain. Nitrogen pollution exceeds safe limits on 84% of the UK's sensitive habitats, and in Europe's oak forests, more nitrogen means fewer of these fungi. Only 7% of our native woodland is in good ecological condition, and more than half of woodland plants and animals are in decline.
 
 Fungi decide whether a forest thrives or collapses, and we can't see them. The best fungal map has a one-kilometre pixel, and England's national soil survey is 656 samples, taken once.
 
@@ -44,11 +44,11 @@ Our edge comes from the next step, which is hardware: a passive air sampler. It 
 
 Why do we need it? Today's soil DNA is coarse. In the Forestry England data, fewer than 4 in 10 fungal sequences can even be named to a genus. And 64% of the change in airborne fungi happens week to week, which no annual survey sees.
 
-Weekly, dated, species-level records from fixed sites give us proprietary data that nobody else has. With that data, we can move beyond tree-root fungi to the ecological impact of specific species: pathogens like ash dieback, the decomposers, and the fungi that wildlife depends on. The pilot is 10 sites, for $15,000 to $45,000.
+Weekly, dated, species-level records from fixed sites give us proprietary data that nobody else has. With that data, we can go beyond broad groups like ectomycorrhizal fungi and measure the ecological impact of individual species: which root partners keep an oak wood healthy, which decomposers recycle its nutrients, and which pathogens threaten it. The pilot is 10 sites, for $15,000 to $45,000.
 
 ## 6. Close (4:40 – 5:00)
 
-80% of our ash trees will die. Only 7% of our native woodland is in good health. The fungi behind both are invisible today.
+Six in ten trees depend on these fungi. 2,300 species depend on our oaks. Only 7% of our native woodland is in good health, and the fungi holding it together are invisible today.
 
 Spora maps them now. With our samplers, it will tell you which species matter, where, and when.
 
@@ -66,9 +66,10 @@ We're asking for [funding / a pilot partner / data access]. Thank you.
 
 | Figure | Source |
 |---|---|
-| At least 80% of UK ash expected to die | [Woodland Trust ash dieback position statement, 2019](https://woodlandtrust.org.uk/publications/2019/06/ash-dieback-position-statement/) |
-| 955 species use ash, 44 only use ash | [Mitchell et al. 2014, JNCC Report 483](https://data.jncc.gov.uk/data/1352bab5-3914-4a42-bb8a-a0a1e2b15f14/JNCC-Report-483-FINAL-WEB.pdf) (some summaries say 45) |
-| £14.8bn cost of ash dieback to Britain | [Hill et al. 2019, Current Biology](https://ox.ac.uk/node/1520363) |
+| EcM trees are about 60% of tree stems on Earth | [Steidinger et al. 2019, Nature](https://eprints.whiterose.ac.uk/146845/1/Steidinger_et_al_mainMS_AAM_Nature_submitted2018.pdf) |
+| 2,300 species associated with British oak, 326 found only on oak | [Mitchell et al. 2019, Biological Conservation](https://www.hutton.ac.uk/node/15973) (James Hutton Institute) |
+| Nutrient nitrogen exceeds critical loads on 84% of UK sensitive habitat area (2021) | [JNCC UK Biodiversity Indicator B5a](https://jncc.gov.uk/our-work/ukbi-b5a-air-pollution) (all sensitive habitats, not woodland alone) |
+| More nitrogen, fewer EcM fungi in European oak forests | [Suz et al. 2014, Molecular Ecology](https://www.pubmed.gov/25277863/); [van der Linde et al. 2018, Nature](https://www.imperial.ac.uk/news/186573/pollution-hits-fungi-that-nourish-european) |
 | 7% of UK native woodland in good condition; over half of woodland species declining | [Woodland Trust, State of the UK's Woods and Trees 2021](https://woodlandtrust.org.uk/publications/2021/04/state-of-uk-woods-and-trees-2021) |
 | 1 km best global fungal map | Van Nuland et al. 2025, Nature |
 | 13 Gt CO2e/yr to mycorrhizal fungi | [Hawkins et al. 2023, Current Biology](https://eprints.whiterose.ac.uk/199952) |
