@@ -6,13 +6,13 @@ About 640 spoken words. The order runs problem, solution, scientific validity, f
 
 ## 1. Problem (0:00 – 0:35)
 
-Six in ten trees on Earth depend on one group of fungi. Ectomycorrhizal fungi wrap around tree roots and supply water and nutrients in exchange for sugar.
+Six in ten trees on Earth depend on ectomycorrhizal fungi. They wrap around tree roots and trade water and nutrients for sugar.
 
-In Britain, those trees include our native oaks. 2,300 species live on oak, and 326 of them live nowhere else.
+In Britain, those trees include our native oaks. 2,300 species live on oak, and 326 live nowhere else.
 
-That partnership is under strain. Nitrogen pollution exceeds safe limits on 84% of the UK's sensitive habitats, and in Europe's oak forests, more nitrogen means fewer of these fungi. Only 7% of our native woodland is in good ecological condition, and more than half of woodland plants and animals are in decline.
+That partnership is failing. Nitrogen pollution exceeds safe limits on 84% of the UK's sensitive habitats, and more nitrogen means fewer of these fungi. Only 7% of our native woodland is in good condition.
 
-Fungi decide whether a forest thrives or collapses, and we can't see them. The best fungal map has a one-kilometre pixel, and England's national soil survey is 656 samples, taken once.
+And we can't see it happening. The best fungal map has a one-kilometre pixel. England's national soil survey is 656 samples, taken once.
 
 ## 2. Solution (0:35 – 1:50)
 
