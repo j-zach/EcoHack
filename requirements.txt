@@ -1,0 +1,12 @@
+turingdb==3.1
+geotessera==0.11.1
+earthengine-api==1.7.53
+rasterio==1.5.2
+rioxarray==0.24.0
+geopandas==1.2.0
+xarray==2026.9.0
+pandas==3.1.1
+numpy==2.5.5
+pyarrow==26.0.1
+scikit-learn==1.9.1
+jupyterlab==4.6.6
