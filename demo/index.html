@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spora Fungal Map</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="viz-root">
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">◍</span>
+      <span class="name">Spora</span>
+      <span class="tag">below-ground fungal monitoring from satellite + eDNA</span>
+    </div>
+    <div class="topbar-right">
+      <span class="badge" title="Interface is a mock-up; every number and map pixel is a real model output">Simulated demo · real model outputs</span>
+      <button id="themeBtn" class="ghost" aria-label="Toggle light/dark">◐</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Left: user + guided flow -->
+    <aside class="panel left">
+      <div class="persona">
+        <div class="avatar" aria-hidden="true">FE</div>
+        <div>
+          <div class="persona-name">District ecologist, Forestry England</div>
+          <div class="muted">Goal: where are mycorrhizal fungi healthy, and where should we sample next?</div>
+        </div>
+      </div>
+
+      <label class="field-label" for="query">Ask Spora</label>
+      <div class="query">
+        <input id="query" type="text" readonly value="">
+        <button id="playBtn" class="primary">▶ Play demo</button>
+      </div>
+
+      <ol id="steps" class="steps"></ol>
+
+      <label class="field-label" for="sitePick">Explore any site (held-out predictions)</label>
+      <select id="sitePick"></select>
+      <p class="muted small">Each site's predictions come from a model that never saw that site
+        (leave-one-site-out). The 10 m wall-to-wall map is exported for the demo site only.</p>
+    </aside>
+
+    <!-- Centre: map -->
+    <section class="map-wrap">
+      <div id="map" role="region" aria-label="Map of predicted ectomycorrhizal richness"></div>
+      <div id="overlayMsg" class="overlay-msg hidden"></div>
+      <div class="map-legend" id="mapLegend" hidden>
+        <div class="legend-title">Predicted EcM richness <span class="muted">(OTUs per sample)</span></div>
+        <div class="ramp" id="ramp"></div>
+        <div class="ramp-ticks" id="rampTicks"></div>
+        <div class="legend-row"><span class="dot-sw"></span><span>Soil sample, filled by <b>observed</b> richness</span></div>
+        <div class="legend-row"><span class="dia-sw"></span><span>Suggested validation plot</span></div>
+      </div>
+      <div class="hover-read" id="hoverRead" hidden></div>
+    </section>
+
+    <!-- Right: honesty panel -->
+    <aside class="panel right">
+      <h2 id="siteTitle">Neroche</h2>
+      <div class="muted small" id="siteSub"></div>
+
+      <div class="kpis" id="kpis"></div>
+      <div id="status" class="status"></div>
+
+      <h3>Observed vs predicted at this site</h3>
+      <div class="muted small">Model trained on the other 20 sites only</div>
+      <div id="scatter" class="chart"></div>
+
+      <h3>How well does it transfer? <span class="muted small">R², EcM richness</span></h3>
+      <div class="legend" id="barLegend"></div>
+      <div id="bars" class="chart"></div>
+      <p class="muted small" id="barNote"></p>
+
+      <details class="table-view">
+        <summary>All 21 sites as a table</summary>
+        <div id="siteTable"></div>
+      </details>
+
+      <div id="nextSteps" class="next hidden"></div>
+    </aside>
+  </main>
+
+  <footer class="foot small muted" id="foot"></footer>
+  <div id="tip" class="tip" role="tooltip" hidden></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="data/demo_data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

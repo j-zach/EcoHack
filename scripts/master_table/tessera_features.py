@@ -21,7 +21,7 @@ def main():
     m = pd.read_csv(OUT / "master.csv")
     pts = m[(m.coord_source == "sample") & (~m.gps_flagged)].copy()
     pts["tile"] = [(math.floor(lo * 10), math.floor(la * 10)) for la, lo in zip(pts.lat, pts.lon)]
-    gt = GeoTessera(cache_dir=ROOT / "tessera_cache")
+    gt = GeoTessera(dataset_variant="cambridge", cache_dir=ROOT / "tessera_cache")
     rows = []
     tiles = sorted(pts.tile.unique())
     for i, t in enumerate(tiles, 1):

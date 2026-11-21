@@ -23,6 +23,7 @@ LightGBM needs the system `libomp`; this uses scikit-learn's HistGradientBoostin
 2. `build_master.py`: per-sample table → `out/master.csv` (guilds = FungalTraits `primary_lifestyle` by genus)
 3. `tessera_features.py`: 10 m pixel + 3×3 window mean at each sample with its own, unflagged coordinates
 4. `run_models.py`: random 5-fold vs leave-one-site-out, all samples and woodland only → `out/model_results.{csv,md}`
+5. `export_demo_data.py` (optional): real held-out predictions + a 10 m map of one held-out site for the demo frontend → `demo/data/demo_data.js` (see `demo/README.md`)
 
 ## Data provenance
 **UK only (England).** Every modelled sample comes from the Forestry England 2023 survey: 546 samples,
