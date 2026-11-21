@@ -2,7 +2,13 @@
 
 **Mapping the hidden fungi of tropical forests at 10 m, with low-cost airborne eDNA samplers and free satellite embeddings.**
 
-> **In 100 words.** Fungi are hidden helpers under every forest. They feed trees, store carbon and gave us medicines like penicillin. Yet over 90% have never been named, and the richest rainforests are barely sampled. Satellites can't see fungi, and today's best map is blurry: one dot covers a whole kilometre. Our fix: cheap boxes in the forest catch fungal spores from the air every week. We read their DNA and match each catch to sharp 10 m satellite data. A model learns where fungi live and picks where the next box goes. Next: a 10-site rainforest pilot.
+> **In 150 words.** Fungi are hidden helpers living under every forest. They feed trees, lock carbon into the soil, and gave us medicines like penicillin. But scientists have named fewer than 1 in 10 kinds, and rainforests, where most of them live, are the least explored places on Earth.
+>
+> Why is this so hard? Satellites can't see fungi; they only see the trees and land above them. Today's best fungi map is blurry: one dot covers a whole kilometre. And fungi pop up and vanish within days, while satellite maps update once a year.
+>
+> Our idea: put cheap boxes in the forest that catch fungal spores from the air every week. We read the spores' DNA to learn exactly which fungi were there, then match each catch to sharp 10-metre satellite pictures. A computer learns which places hold which fungi and tells us where the next box should go.
+>
+> **Next:** test it at 10 rainforest sites.
 
 <table>
 <tr>
