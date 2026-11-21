@@ -2,7 +2,7 @@
 
 **Mapping the hidden fungi of tropical forests at 10 m, with low-cost airborne eDNA samplers and free satellite embeddings.**
 
-> **In 150 words.** Fungi are hidden helpers living under every forest. They feed trees, lock carbon into the soil, and gave us medicines like penicillin. But scientists have named fewer than 1 in 10 kinds, and rainforests, where most of them live, are the least explored places on Earth.
+> Fungi are hidden helpers living under every forest. They feed trees, lock carbon into the soil, and gave us medicines like penicillin. But scientists have named fewer than 1 in 10 kinds, and rainforests, where most of them live, are the least explored places on Earth.
 >
 > Why is this so hard? Satellites can't see fungi; they only see the trees and land above them. Today's best fungi map is blurry: one dot covers a whole kilometre. And fungi pop up and vanish within days, while satellite maps update once a year.
 >
