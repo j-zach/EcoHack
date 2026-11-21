@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Spore Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<header class="topbar">
+  <div class="mark"><span class="spore"></span>Spore Atlas</div>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="field" aria-selected="true">Field</button>
+    <button role="tab" data-tab="pitch" aria-selected="false">Pitch</button>
+    <button role="tab" data-tab="landscape" aria-selected="false">Landscape</button>
+    <button role="tab" data-tab="evidence" aria-selected="false">Evidence</button>
+  </nav>
+  <span class="flag">Simulation · synthetic fungi</span>
+</header>
+
+<!-- FIELD: the sampler in the forest -->
+<section id="sampler" class="view" data-view="field">
+  <div id="app"></div>
+  <div id="hud">
+    <section id="glance" class="panel">
+      <div class="g-eyebrow">Passive airborne eDNA sampler · tropical understory</div>
+      <h1>Fungi fruit for days. Satellite maps like TESSERA see one summary a year. <em>We catch their DNA every week.</em></h1>
+      <ol class="g-steps">
+        <li><span><b>Rain</b> makes fungi fruit and release spores for 1 to 3 days.</span></li>
+        <li><span><b>The sampler</b> catches them in a sealed cartridge, one per week, for 12 weeks on solar.</span></li>
+        <li><span><b>Weekly DNA labels</b> add the timing and the species that annual 10 m embeddings can't hold. Together they make a map nobody else has.</span></li>
+        <li><span><b>Who pays:</b> pharma finds new chemistry, governments report on nature, farms match microbes to soil. Insurers later.</span></li>
+      </ol>
+      <div class="g-btns">
+        <button id="gTour" class="primary">▶ Play the 70 s tour</button>
+        <a class="gbtn" href="#pitch">See the pitch →</a>
+        <button id="gStats">Live readouts</button>
+        <button id="gCtl">Controls</button>
+      </div>
+    </section>
+
+    <section id="info" class="panel hidden">
+      <div class="brand">Live readouts <span>passive airborne eDNA sampler</span></div>
+      <div class="synthetic">Simulation · synthetic data · spores &amp; capture zone not to scale</div>
+      <div id="clock" class="clock"></div>
+      <dl>
+        <dt>Weather</dt><dd id="weather"></dd>
+        <dt>Wind</dt><dd id="wind"></dd>
+        <dt>Fruiting</dt><dd id="fruiting"></dd>
+        <dt>Cartridge</dt><dd id="cart"></dd>
+        <dt>Power</dt><dd id="power"></dd>
+        <dt>Uplink</dt><dd id="uplink"></dd>
+        <dt>Sentinel-2</dt><dd id="s2"></dd>
+      </dl>
+      <div class="g-btns"><button id="gBack">Back to summary</button></div>
+    </section>
+
+    <section id="controls" class="panel hidden">
+      <div class="row">
+        <button id="play">❚❚ Pause</button>
+        <button id="rain" title="R">🌧 Rain</button>
+      </div>
+      <label class="speed">Time <input id="speed" type="range" min="0.03" max="1" step="0.01" value="0.12"><output id="speedOut"></output></label>
+      <div class="row views">
+        <button data-view="sampler" title="1">Close</button>
+        <button data-view="forest" title="2">Mid</button>
+        <button data-view="far" title="3">Far</button>
+        <button data-view="canopy" title="4">Canopy</button>
+        <button data-view="orbit" title="5">Orbit</button>
+      </div>
+      <div class="zoom">
+        <button id="zoomIn" title="+">＋</button>
+        <input id="zoom" type="range" min="0" max="1" step="0.001" value="0.2">
+        <button id="zoomOutBtn" title="−">－</button>
+      </div>
+      <div class="zoom-read"><span id="zoomOut"></span></div>
+      <label class="speed">Haze <input id="haze" type="range" min="0" max="2" step="0.05" value="1"></label>
+      <div class="row">
+        <button id="explode" title="E">Explode</button>
+        <button id="xray" title="X">X-ray</button>
+        <button id="labels" title="L">Labels</button>
+      </div>
+      <div class="row">
+        <button id="air" title="F">〰 Airflow</button>
+        <button id="day" title="D">☀ Always day</button>
+      </div>
+      <div class="row">
+        <button id="tour" title="T" class="primary">▶ Guided tour</button>
+      </div>
+      <div class="keys">Scroll zoom · drag orbit · right-drag pan · 1–5 views · T tour · Space · R rain · F airflow · E explode · X x-ray · L labels</div>
+    </section>
+
+    <section id="chartPanel" class="panel">
+      <div class="chart-head">
+        <span>What the ground sees every week vs. what orbit sees</span>
+        <span id="legend" class="legend"></span>
+      </div>
+      <canvas id="chart"></canvas>
+    </section>
+
+    <div id="toasts"></div>
+    <div id="tour-panel" class="panel hidden">
+      <div class="tour-top"><span class="step"></span><span class="tour-btns"><button class="prev">←</button><button class="next">→</button><button class="close">✕</button></span></div>
+      <h2></h2>
+      <p></p>
+      <div class="bar"><i></i></div>
+    </div>
+    <div id="satNote" class="panel hidden">
+      <b>This is what an optical satellite (Sentinel-2) gets.</b> Canopy tops, and on most tropical days cloud. Radar sees through cloud but not the fungi.
+      The sampler and every fruiting body sit ~30 m below. Fungi fruit and die in days, which an annual composite cannot resolve.
+    </div>
+  </div>
+</section>
+
+<!-- LANDSCAPE: where to put the next sampler -->
+<main class="view page" data-view="landscape" hidden>
+  <div class="wrap">
+    <header class="phead">
+      <div class="eyebrow">Real satellite habitat · real terrain · synthetic fungi</div>
+      <h2 class="h1">Where should the next sampler go?</h2>
+      <p class="lede">Three low-data tropical landscapes. A model learns the fungal field from a few samplers, shows where it is unsure, and places the next ten there. We race it against a grid and random placement.</p>
+    </header>
+    <div class="rtabs" id="rtabs"></div>
+    <div class="bench">
+      <div class="stage">
+        <canvas id="gl" aria-label="3D terrain with sampler locations"></canvas>
+        <div class="legend3d" id="legend3d"></div>
+        <div class="hud3d">
+          <div class="seg" id="layers" role="group" aria-label="Map layer">
+            <button data-l="habitat" aria-pressed="true">Habitat</button>
+            <button data-l="truth" aria-pressed="false">Fungal field</button>
+            <button data-l="pred" aria-pressed="false">Prediction</button>
+            <button data-l="unc" aria-pressed="false">Uncertainty</button>
+          </div>
+          <div class="seg" id="rounds" role="group" aria-label="Samplers placed">
+            <button data-r="0" aria-pressed="true">10</button>
+            <button data-r="2" aria-pressed="false">30</button>
+            <button data-r="9" aria-pressed="false">100</button>
+          </div>
+          <label class="ctl"><input type="checkbox" id="showGrid"> Compare grid</label>
+        </div>
+      </div>
+      <aside class="side">
+        <div class="card">
+          <div class="eyebrow" id="tileId"></div>
+          <h3 id="regionName"></h3>
+          <div class="facts">
+            <div><b id="fArea"></b><span>area</span></div>
+            <div><b id="fRelief"></b><span>relief</span></div>
+            <div><b id="fPx"></b><span>pixel</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Error across habitat types <small>lower is better</small></h4>
+          <svg class="chart" id="cMac" viewBox="0 0 360 160" role="img" aria-label="Habitat-balanced error versus samplers"></svg>
+          <h4>Whole-map accuracy, R² <small>higher is better</small></h4>
+          <svg class="chart" id="cR2" viewBox="0 0 360 160" role="img" aria-label="R squared versus samplers"></svg>
+          <div class="series"><span><i style="background:var(--guided)"></i>Guided</span><span><i style="background:var(--grid)"></i>Grid</span><span><i style="background:var(--random)"></i>Random</span></div>
+        </div>
+        <div class="card verdict" id="verdict"></div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- PITCH -->
+<main class="view page" data-view="pitch" hidden>
+  <div class="wrap">
+    <header class="phead">
+      <div class="eyebrow">The problem</div>
+      <h2 class="h1"><span class="lead">Over 90% of fungi have never been named, and no satellite can see&nbsp;them.</span> <span class="hl">We map them at 10&nbsp;m, 100×&nbsp;sharper than today's best map, with low-cost eDNA&nbsp;samplers on the&nbsp;ground.</span></h2>
+    </header>
+    <div class="entity"><span>Start-up</span><span>AI track</span><span>Next step: $15k to $45k, 10-site tropical pilot</span></div>
+    <div class="stats">
+      <div class="stat"><b>5–8%</b><span>of fungal species are named. About 155,000 of 2 to 3 million.</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11687528">Current Biology, 2025</a></div>
+      <div class="stat"><b>1 km</b><span>is the pixel of today's best global fungal map. One pixel holds 10,000 of our 10 m squares.</span><a href="https://www.nature.com/articles/s41586-025-09277-4">Van Nuland et al., Nature, 2025</a></div>
+      <div class="stat"><b>9.5%</b><span>of fungal richness hotspots are protected. The rest sit in the least-sampled places on Earth.</span><a href="https://www.nature.com/articles/s41586-025-09277-4">Nature, 2025</a></div>
+      <div class="stat"><b>$2.23B</b><span>to bring one drug to market, counting failures. Blind collecting mostly rediscovers known compounds.</span><a href="https://www.swissinfo.ch/eng/healthcare-innovation/why-drugs-are-becoming-more-expensive-to-develop/91851935">Deloitte, 2025</a></div>
+    </div>
+
+    <section class="block">
+      <div class="eyebrow">In eight questions</div>
+      <div class="qa">
+        <article class="card"><h4>What is the problem?</h4>
+          <p>Fungi run forest growth, soil carbon and much of our medicine, yet <b>fewer than 1 in 10 species are known</b>. The richest places, tropical rainforests, are the least sampled. The best global map is <b>1 km per pixel</b>, and satellite maps like TESSERA give <b>one summary a year</b>, while fungi appear and vanish <b>within days</b>.</p></article>
+        <article class="card"><h4>What is the solution?</h4>
+          <p><b>Low-cost passive samplers</b> catch fungal spores from the air into a sealed weekly cartridge; DNA names the species, including unnamed ones. We pair each sample with <b>free 10 m satellite embeddings</b> and train a model that predicts fungi everywhere, shows where it is unsure, and <b>sends the next sampler there</b>.</p></article>
+        <article class="card"><h4>Biggest limitation?</h4>
+          <p><b>The core claim is unproven.</b> On 66 real UK woodlands, satellite data did not beat soil pH. Our tropical result is a simulation. Guided placement only helps when samples are scarce. Week-long passive sampling in humid understory is untested. The pilot has a pass mark set in advance; if we miss it, we stop.</p></article>
+        <article class="card"><h4>What is the economic gap?</h4>
+          <ul class="list">
+            <li><b>Pharma:</b> $0.7B to $2.2B per approved drug. Blind collecting rediscovers known compounds and carries legal risk. Nobody sells "where to collect, with consent attached".</li>
+            <li><b>Governments:</b> must report on biodiversity, with almost no soil-life data.</li>
+            <li><b>Fieldwork</b> is the cost, not the lab (about $4 chemistry, ~$150 to $500 commercial per sample). Guided placement makes each trip count.</li>
+          </ul></article>
+        <article class="card"><h4>Who is the payer?</h4>
+          <ol class="list">
+            <li><b>Pharma and biotech:</b> a collection shortlist with consent and permits.</li>
+            <li><b>Governments:</b> national fungal monitoring for reporting.</li>
+            <li><b>Farm biologicals:</b> which microbe suits which soil.</li>
+            <li><b>eDNA and Earth-observation firms</b> such as EchoLabs: partners and data buyers.</li>
+            <li><b>Insurance:</b> later; an even grid prices land better in our simulation.</li>
+          </ol></article>
+        <article class="card"><h4>Ecological risk, if any?</h4>
+          <ul class="list">
+            <li><b>Over-collecting:</b> sensitive locations are blurred or withheld.</li>
+            <li><b>False absence:</b> uncertainty is always published, so "nothing here" can't justify clearing.</li>
+            <li><b>Biopiracy:</b> communities co-own the data under Nagoya and the Cali Fund.</li>
+            <li><b>Biosecurity:</b> strict rules for samples that may carry pathogens.</li>
+            <li><b>Footprint:</b> passive, no chemicals, every unit retrieved.</li>
+          </ul></article>
+        <article class="card"><h4>What data do we need?</h4>
+          <ul class="list">
+            <li><b>Weekly airborne fungal DNA</b> from fixed tropical sites: the missing piece.</li>
+            <li><b>Satellite embeddings</b> (TESSERA, AlphaEarth): free.</li>
+            <li><b>Elevation, climate, soil</b> (Copernicus, WorldClim, SoilGrids): free.</li>
+            <li><b>Benchmarks:</b> SPUN 1 km map, GlobalFungi, Global Soil Mycobiome, Global Spore Sampling Project: open.</li>
+            <li><b>Ground checks:</b> soil and fruiting-body surveys at the same sites.</li>
+          </ul></article>
+        <article class="card moat"><h4>What dataset becomes our moat?</h4>
+          <p><b>A multi-year, weekly, DNA-identified record of airborne fungi at fixed tropical sites</b>, each sample tied to its location, date, satellite habitat and signed consent.</p>
+          <ul class="list">
+            <li><b>Time can't be bought:</b> a later competitor never gets this year's seasons.</li>
+            <li><b>Consent takes years:</b> agreements with countries and communities aren't signed overnight.</li>
+            <li><b>Nobody else builds it:</b> existing efforts are temperate, soil-based or one-off.</li>
+          </ul>
+          <p class="note">Satellite data, models and sampler hardware are open to everyone. They are not the moat.</p></article>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="eyebrow">How it works</div>
+      <h3 class="h2">Catch the DNA. Read the land. Learn. Choose the next spot.</h3>
+      <div class="steps">
+        <div><span class="n">1</span><b>Catch</b><p>Low-cost passive samplers pull fungal spores out of the air into a sealed weekly cartridge. Sequencing names what was there, including species nobody has named.</p></div>
+        <div><span class="n">2</span><b>Read</b><p>Free 10 m satellite embeddings (TESSERA, AlphaEarth) describe every pixel: trees, water, structure. Radar sees through cloud.</p></div>
+        <div><span class="n">3</span><b>Learn</b><p>A model links habitat to the fungi found there and predicts the places we have not sampled, with an honest uncertainty map.</p></div>
+        <div><span class="n">4</span><b>Choose</b><p>The next sampler goes where the model is least sure. Each sample teaches the model as much as possible.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="eyebrow">Who pays</div>
+      <div class="tbl"><table>
+        <thead><tr><th>Buyer</th><th>Their problem today</th><th>What we give them</th></tr></thead>
+        <tbody>
+          <tr><td>Pharma and biotech</td><td>$708M median per approved drug (RAND, 2025). Blind collecting re-finds known chemistry and carries legal risk.</td><td>A shortlist of where to collect, with consent and permits attached</td></tr>
+          <tr><td>Governments</td><td>New biodiversity reporting duties, almost no soil data</td><td>A national fungal monitoring system run with local scientists</td></tr>
+          <tr><td>Farm biologicals</td><td>Microbial products fail in soils they don't suit</td><td>Which strain suits which field</td></tr>
+          <tr class="later"><td>Finance and insurance <span class="tag syn">later</span></td><td>About $58 trillion of GDP depends on nature (UN, 2025), but soil life is unmeasured</td><td>Soil condition per land parcel, once the map is proven</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- EVIDENCE -->
+<main class="view page" data-view="evidence" hidden>
+  <div class="wrap">
+    <header class="phead">
+      <div class="eyebrow">What we tested, what we found, what we still need to prove</div>
+      <h2 class="h1">Evidence, including the parts that didn't work.</h2>
+    </header>
+
+    <section class="block two">
+      <div class="card">
+        <span class="tag syn">simulation</span>
+        <h3>Guided placement wins when samples are scarce</h3>
+        <div class="tbl"><table id="simTable"><thead><tr><th>Landscape</th><th class="n">Species found, 10 samplers</th><th class="n">Error, 10</th><th class="n">Error, 30</th><th class="n">R², 100</th></tr></thead><tbody></tbody></table></div>
+        <p class="note">Guided vs the better of grid and random. Species: 400 synthetic species, most rare. Error: averaged across habitat types. R²: whole map, where an even grid wins. 5 synthetic fungal fields per landscape on real TESSERA habitat and Copernicus terrain.</p>
+      </div>
+      <div class="card">
+        <span class="tag real">real data</span>
+        <h3>66 UK woodlands: satellite didn't help yet</h3>
+        <div class="tbl"><table id="ukTable"><thead><tr><th>Predictors</th><th class="n">Fungal diversity</th><th class="n">Functional groups</th></tr></thead><tbody></tbody></table></div>
+        <p class="note">Cross-validated R², 20 repeats of 5-fold. Only 66 sites, locations rounded to 1 km, and soil pH dominates. This is the gap precisely located, dated eDNA samples are built to close.</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="eyebrow">Who else is here</div>
+      <div class="tbl"><table>
+        <thead><tr><th>Who</th><th>What they have</th><th>How we differ</th></tr></thead>
+        <tbody>
+          <tr><td>SPUN + GlobalFungi + Cambridge TESSERA</td><td>Satellite embeddings predict ectomycorrhizal richness at 10 m, from ~12,000 temperate and boreal soil samples (<a href="https://arxiv.org/abs/2604.09818">arXiv, 2026</a>)</td><td>Partner, not rival. They proved the method in temperate soil. We bring tropical, airborne, weekly labels they don't have.</td></tr>
+          <tr><td>Global Spore Sampling Project</td><td>47-site airborne fungal DNA network, 2018 to 2021, open data. Only 6 sites in the Southern Hemisphere.</td><td>Free baseline. Ours is autonomous, multi-year and tropical.</td></tr>
+          <tr><td>Leiden / Naturalis "Nutshell"</td><td>Open-source passive air eDNA sampler. Beat active samplers on total species over 48 to 96 h (zoo trial, 2026).</td><td>Proof that passive works. We use it in our pilot before building our own.</td></tr>
+          <tr><td>NatureMetrics, DNAir</td><td>Commercial eDNA services and semi-autonomous samplers, no tropical fungal focus</td><td>We sell a predictive map and a time series, not one-off lab results.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="block two">
+      <div>
+        <div class="eyebrow">Wider impacts and safeguards</div>
+        <ul class="list">
+          <li><b>Location secrecy.</b> Rare species and chemistry hotspots are blurred or withheld, so maps can't guide over-collecting.</li>
+          <li><b>No false "empty".</b> We always publish uncertainty. A blank prediction is never sold as proof that nothing lives there.</li>
+          <li><b>Bias in the open.</b> The model is weakest where data is thinnest. We report accuracy per region.</li>
+          <li><b>Consent and sharing.</b> Communities and host institutions co-own the data (CARE principles), are paid partners and co-authors, and data stays in-country.</li>
+          <li><b>Biosecurity.</b> Air samples can hold plant and human pathogens. Handling, shipping and release rules come first.</li>
+          <li><b>Light footprint.</b> Passive, no chemicals released, every unit retrieved or recycled.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="eyebrow">What we must prove</div>
+        <ul class="list">
+          <li><b>90 days:</b> 10 m embeddings plus dated labels beat the 1 km map and a climate-only model on tropical sites, with the pass mark set in advance.</li>
+          <li><b>6 months:</b> 10 pilot sites with open-source samplers, about $15k to $45k. Measure real cost per sample and whether cartridges survive humid understory.</li>
+          <li><b>12 months:</b> one paying customer before any custom hardware.</li>
+          <li><b>Always:</b> cost per unit of model improvement falls as we grow.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
