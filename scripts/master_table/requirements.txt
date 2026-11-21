@@ -1,0 +1,10 @@
+geotessera==0.11.1
+pyproj
+pandas
+numpy
+pyarrow
+scikit-learn
+scipy
+openpyxl
+tabulate
+certifi
